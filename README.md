@@ -6,6 +6,11 @@ Geo location of parking and signal panel in the city of Montreal.
 
 ## Getting started
 
+## Data urls
+https://www.donneesquebec.ca/recherche/dataset/vmtl-stationnements-deneigement#
+
+https://storage.googleapis.com/dx-montreal/resources/cef524c0-c805-4983-a6bd-ac23c8fdfe37/stationnements_h_2020_2021.geojson?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Expires=60&X-Amz-Credential=GOOG1EM55P356HYDSB5BC4M4SBSA6Q7NQVVTNVVFSZOBSOVIVW5ZADICRGUKA%2F20211105%2Feurope-west1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Date=20211105T180246Z&X-Amz-Signature=3707eb6ccd4b227b5aeb286990516e3e85d1bcb6e6951085f7363cbe8a2dc77e
+
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
 Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
