@@ -1,0 +1,20 @@
+{
+  "name": "520-project-ibhir-maheux-saban",
+  "version": "1.0.0",
+  "description": "MERN stack project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/Yassine.Ibhir/520-project-ibhir-maheux-saban.git"
+  },
+  "author": "Yassine Ibhir and Estefan maheux-saban",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/Yassine.Ibhir/520-project-ibhir-maheux-saban/issues"
+  },
+  "homepage": "https://gitlab.com/Yassine.Ibhir/520-project-ibhir-maheux-saban#readme"
+}
