@@ -117,39 +117,41 @@ class Dao {
 
 }
 
+module.exports = DAO;
+
 // Sample data
-const parkings = [ 
+// const parkings = [ 
     
-  {
+//   {
       
-    "LOCATION": "Rue Fleury near Chambord St. (parking #335)",
-    "HOURS": "3:00 pm to 07:00 am",
-    "BOROUGH": "Ahunstic-Cartierville",
-    "NBR_PLA_I": 17, 
-    "NOTE_EN": "Hourly spaces",
-    "TYPE_PAY": 0,
-    "geometry": { "type": "Point", "coordinates": [-73.6584, 45.56] } 
-  },
-  {   
-    "LOCATION": "Lucie-Bruneau Park - 7051 de l'Alsace Ave",
-    "HOURS": "6:00 am to 6:00 pm",
-    "BOROUGH": "Anjou",
-    "NBR_PLA_I": 20,
-    "NOTE_EN": null,
-    "TYPE_PAY": 0,
-    "geometry": { "type": "Point", "coordinates": [-73.5833, 45.6033] } 
-  } 
-];  
+//     "LOCATION": "Rue Fleury near Chambord St. (parking #335)",
+//     "HOURS": "3:00 pm to 07:00 am",
+//     "BOROUGH": "Ahunstic-Cartierville",
+//     "NBR_PLA_I": 17, 
+//     "NOTE_EN": "Hourly spaces",
+//     "TYPE_PAY": 0,
+//     "geometry": { "type": "Point", "coordinates": [-73.6584, 45.56] } 
+//   },
+//   {   
+//     "LOCATION": "Lucie-Bruneau Park - 7051 de l'Alsace Ave",
+//     "HOURS": "6:00 am to 6:00 pm",
+//     "BOROUGH": "Anjou",
+//     "NBR_PLA_I": 20,
+//     "NOTE_EN": null,
+//     "TYPE_PAY": 0,
+//     "geometry": { "type": "Point", "coordinates": [-73.5833, 45.6033] } 
+//   } 
+// ];  
 
 
-// Sample test
-(async function(){
-  const dao = new Dao();
-  await dao.connect("parking", "parking_streets");
-  await dao.insertMany(parkings);
-  await dao.close();
-  // check singelton implementation
-  const dao1 = new Dao();
-  console.log(dao === dao1);
-})();
+// // Sample test
+// (async function(){
+//   const dao = new Dao();
+//   await dao.connect("parking", "parking_streets");
+//   await dao.insertMany(parkings);
+//   await dao.close();
+//   // check singelton implementation
+//   const dao1 = new Dao();
+//   console.log(dao === dao1);
+// })();
 
