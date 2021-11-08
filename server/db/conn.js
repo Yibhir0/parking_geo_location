@@ -117,7 +117,7 @@ class Dao {
 
 }
 
-module.exports = DAO;
+module.exports = Dao;
 
 // Sample data
 // const parkings = [ 

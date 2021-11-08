@@ -1,3 +1,0 @@
-/**
- * Load atlas with dataset.
- */
