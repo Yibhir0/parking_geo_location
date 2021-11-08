@@ -39,8 +39,4 @@ async function insertToDb(dbName, colName){
 
 }
 
-(async function(){
-    await insertToDb("parkings", "parking_streets");
-})();
-
 module.exports = insertToDb;
