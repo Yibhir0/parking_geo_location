@@ -35,7 +35,7 @@ async function read(path){
 async function readData(path){
   const finalArray = []
   let result = await read(path)
-  result.forEach(element => {
+  result.features.forEach(element => {
     finalArray.push({
       LOCATION: element.properties.LOCATION,
       HOURS: element.properties.HOURS,
