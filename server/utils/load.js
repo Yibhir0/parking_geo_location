@@ -4,6 +4,7 @@
  * to store in mongodb. We only read values we use.
  * More details in the project instructions.
  */
+ "use strict"
 
 //Import fs module to read file
 const fs = require("fs/promises")
@@ -47,4 +48,4 @@ async function readData(){
   return finalArray
 } 
 
-module.export = readData
+module.exports = readData
