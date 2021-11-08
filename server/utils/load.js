@@ -32,10 +32,10 @@ async function read(path){
  * 
  * @returns {Object} Array of objects
  */
-async function readData(){
+async function readData(path){
   const finalArray = []
-  let result = await read("./montreal_parking_streets.json")
-  result.forEach(element => {
+  let result = await read(path)
+  result.features.forEach(element => {
     finalArray.push({
       LOCATION: element.properties.LOCATION,
       HOURS: element.properties.HOURS,
