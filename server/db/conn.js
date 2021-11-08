@@ -6,8 +6,12 @@
 // Mongodb client
 const { MongoClient } = require("mongodb");
 
+
+
 // Environment Variable
 require("dotenv").config();
+
+let instance = null ;
 
 /**
  * Singelton class creates and accesses the database.
@@ -16,34 +20,45 @@ class Dao {
   constructor(){
     
     // return instance if it already exists 
-    if(Dao.instance instanceof Dao){
-      return Dao.instance;
+    if(instance){
+      return instance;
     }
     
     // Mongodb variables 
-    this.mongoVars = {
-      "client" : new MongoClient(process.env.ATLAS_URL),
-      "dbName" : "parking_streets",
-      "collection" : "parkings"
-    }
-    // Can't change the values of mongoVars
-    Object.freeze(this.mongoVars);
-
+    this.client =  new MongoClient(process.env.ATLAS_URL);
+    this.db = null;
+    this.collection = null;
+    
     // Set the instance to the created object
-    Dao.instance = this;
+    instance = this;
 
   }
 
   /**
    * This method connects to mongoDb
+   * @param {data base name} dbName 
+   * @param { collection name} collName 
+   * @returns from function when connection isestablished
    */
-  async connect(){
+  async connect(dbName, collName){
+
+    if (this.db){
+      console.log("Connected to Atlas");
+      return;
+    }
     
     try {
 
-      await this.mongoVars.client.connect();
+
+      await this.client.connect();
 
       console.log("Connected to Atlas");
+
+       // Create or access a database
+      this.db = await this.client.db(dbName);
+
+       // Create or access a collection
+      this.collection = await this.db.collection(collName);
 
     } catch (err) {
 
@@ -62,18 +77,13 @@ class Dao {
     
 
     try {
-      
-      // Create or access a database
-      const db = this.mongoVars.client.db(this.mongoVars.dbName);
-
-      // Create or access a collection
-      const col = db.collection(this.mongoVars.collection);
+    
 
       // Insert many documents 
-      const result = await col.insertMany(data);
+      const result = await this.collection.insertMany(data);
       
       // Create geospatial index
-      const index = await col.createIndex({ "geometry": "2dsphere" });
+      const index = await this.collection.createIndex({ "geometry": "2dsphere" });
       
       // Print number of documents iserted
       console.log(result.insertedCount);
@@ -95,7 +105,7 @@ class Dao {
    */
   async close(){
     try {
-      this.mongoVars.client.close();
+      this.client.close();
       
     } catch (err) {
   
@@ -135,7 +145,7 @@ const parkings = [
 // Sample test
 (async function(){
   const dao = new Dao();
-  await dao.connect();
+  await dao.connect("parking", "parking_streets");
   await dao.insertMany(parkings);
   await dao.close();
   // check singelton implementation
