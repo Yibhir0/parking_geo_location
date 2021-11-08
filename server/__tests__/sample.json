@@ -1,0 +1,62 @@
+[
+  {
+    "type": "Feature",
+    "properties": {
+      "OBJECTID": 58,
+      "ARRONDISSEMENT": "Ahunstic-Cartierville",
+      "NBR_PLA": 17,
+      "X": 292433.0,
+      "Y": 5046689.31,
+      "ID_STA": 58,
+      "JURIDICTION": "Stationnement de Montréal",
+      "EMPLACEMENT": "Rue Fleury près de la rue Chambord (#335)",
+      "LOCATION": "Rue Fleury near Chambord St. (parking #335)",
+      "HEURES": "15:00 à 07:00",
+      "HOURS": "3:00 pm to 07:00 am",
+      "BOROUGH": "Ahunstic-Cartierville",
+      "NBR_PLA_I": 17,
+      "NOTE_FR": "Section horaire",
+      "NOTE_EN": "Hourly spaces",
+      "TYPE_PAY": 0,
+      "Latitude": 45.56,
+      "Longitude": -73.6584
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -73.6584,
+        45.56
+      ]
+    }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "OBJECTID": 91,
+      "ARRONDISSEMENT": "Anjou",
+      "NBR_PLA": 20,
+      "X": 298302.08,
+      "Y": 5051493.88,
+      "ID_STA": 91,
+      "JURIDICTION": "Municipale",
+      "EMPLACEMENT": "Parc Lucie-Bruneau - 7051 av. de l'Alsace",
+      "LOCATION": "Lucie-Bruneau Park - 7051 de l'Alsace Ave",
+      "HEURES": "06:00 à 18:00",
+      "HOURS": "6:00 am to 6:00 pm",
+      "BOROUGH": "Anjou",
+      "NBR_PLA_I": 20,
+      "NOTE_FR": null,
+      "NOTE_EN": null,
+      "TYPE_PAY": 0,
+      "Latitude": 45.6033,
+      "Longitude": -73.5833
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -73.5833,
+        45.6033
+      ]
+    }
+  }
+]
