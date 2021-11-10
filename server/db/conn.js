@@ -49,15 +49,15 @@ class Dao {
     
     try {
 
-
+      // Connect to db
       await this.client.connect();
 
       console.log("Connected to Atlas");
 
-       // Create or access a database
+      // Create or access a database
       this.db = await this.client.db(dbName);
 
-       // Create or access a collection
+      // Create or access a collection
       this.collection = await this.db.collection(collName);
 
     } catch (err) {
