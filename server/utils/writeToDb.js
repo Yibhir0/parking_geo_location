@@ -24,21 +24,29 @@ const Dao = require("../db/conn");
  */
 async function insertToDb(dbName, colName){
 
-  // Read and get documents
-  let documents = await readData(path);
+  try{
+    // Read and get documents
+    let documents = await readData(path);
 
-  // Create Dao instance
-  let dao = new Dao();
+    // Create Dao instance
+    let dao = new Dao();
 
-  // Connect to database
-  await dao.connect(dbName, colName);
+    // Connect to database
+    await dao.connect(dbName, colName);
     
-  // Insert documents
-  await dao.insertMany(documents);
-    
-  // Close connection
-  await dao.close();
+    // Insert documents
+    await dao.insertMany(documents);
 
+    // Create Index
+    await dao.createInx({ "geometry": "2dsphere" });
+    
+    // Close connection
+    await dao.close();
+  
+  } catch(err){
+    console.error(err);
+  }
+  
 }
 
 module.exports = insertToDb;

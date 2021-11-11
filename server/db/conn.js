@@ -78,20 +78,13 @@ class Dao {
     
 
     try {
-    
-
+  
       // Insert many documents 
       const result = await this.collection.insertMany(data);
-      
-      // Create geospatial index
-      const index = await this.collection.createIndex({ "geometry": "2dsphere" });
       
       // Print number of documents iserted
       console.log(result.insertedCount);
 
-      // Print index result
-      console.log(index);
-    
     // Catch error and display it
     } catch (err) {
 
@@ -99,6 +92,26 @@ class Dao {
 
     }    
   
+  }
+
+  /**
+   * Method Creates a geospatial 2dsphere index.
+   * @param {object} index
+   */
+  async createInx(index){
+    
+    try {
+      // Create geospatial index
+      const result = await this.collection.createIndex(index);
+    
+      // Print index result
+      console.log(result);
+    // Catch error and display it
+    } catch (err) {
+      console.error(err);
+    }  
+    
+    
   }
   
   /**
