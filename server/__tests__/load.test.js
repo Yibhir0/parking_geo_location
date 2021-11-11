@@ -1,5 +1,7 @@
 /**
  * Test load.js 
+ * @author Estefan Maheux-Saban
+ * @author Yassine Ibhir
  */
 const readData = require("../utils/load")
 

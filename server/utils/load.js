@@ -3,8 +3,8 @@
  * and return an array of objects (array of documents)
  * to store in mongodb. We only read values we use.
  * More details in the project instructions.
+ * @author Estefan Maheux-Saban
  */
- "use strict"
 
 //Import fs module to read file
 const fs = require("fs/promises")

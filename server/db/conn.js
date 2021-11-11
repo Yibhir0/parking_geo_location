@@ -1,6 +1,7 @@
 /**
  * Connecting to database, creating a collection
  * , inserting many, and disconnecting.
+ * @author Yassine Ibhir
 */
 
 // Mongodb client
