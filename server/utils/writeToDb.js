@@ -2,6 +2,8 @@
  * Take the result array from load.js.
  * Use conn.js to insert the array of documents in mongodb
  * Create index geo.
+ * @author Estefan Maheux-Saban
+ * @author Yassine Ibhir
  */
 
 
@@ -22,6 +24,7 @@ const Dao = require("../db/conn");
  */
 async function insertToDb(dbName, colName){
 
+  try{
     // Read and get documents
     let documents = await readData(path);
 
@@ -33,10 +36,17 @@ async function insertToDb(dbName, colName){
     
     // Insert documents
     await dao.insertMany(documents);
+
+    // Create Index
+    await dao.createInx({ "geometry": "2dsphere" });
     
     // Close connection
     await dao.close();
-
+  
+  } catch(err){
+    console.error(err);
+  }
+  
 }
 
 module.exports = insertToDb;

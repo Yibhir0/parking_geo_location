@@ -1,6 +1,7 @@
 /**
  * Connecting to database, creating a collection
  * , inserting many, and disconnecting.
+ * @author Yassine Ibhir
 */
 
 // Mongodb client
@@ -49,15 +50,15 @@ class Dao {
     
     try {
 
-
+      // Connect to db
       await this.client.connect();
 
       console.log("Connected to Atlas");
 
-       // Create or access a database
+      // Create or access a database
       this.db = await this.client.db(dbName);
 
-       // Create or access a collection
+      // Create or access a collection
       this.collection = await this.db.collection(collName);
 
     } catch (err) {
@@ -77,20 +78,13 @@ class Dao {
     
 
     try {
-    
-
+  
       // Insert many documents 
       const result = await this.collection.insertMany(data);
-      
-      // Create geospatial index
-      const index = await this.collection.createIndex({ "geometry": "2dsphere" });
       
       // Print number of documents iserted
       console.log(result.insertedCount);
 
-      // Print index result
-      console.log(index);
-    
     // Catch error and display it
     } catch (err) {
 
@@ -98,6 +92,26 @@ class Dao {
 
     }    
   
+  }
+
+  /**
+   * Method Creates a geospatial 2dsphere index.
+   * @param {object} index
+   */
+  async createInx(index){
+    
+    try {
+      // Create geospatial index
+      const result = await this.collection.createIndex(index);
+    
+      // Print index result
+      console.log(result);
+    // Catch error and display it
+    } catch (err) {
+      console.error(err);
+    }  
+    
+    
   }
   
   /**

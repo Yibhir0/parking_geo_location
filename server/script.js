@@ -1,5 +1,7 @@
 /**
  * Load atlas with dataset.
+ * @author Estefan Maheux-Saban
+ * @author Yassine Ibhir
  */
 
 const insertToDb = require("./utils/writeToDb");
@@ -12,9 +14,9 @@ const collName = "parking_streets";
 
 /**
  * Async IIFE populate dataset. 
- */
+*/
 (async function(){
 
-    await insertToDb(dbName,collName);
+  await insertToDb(dbName, collName);
 
 }());
