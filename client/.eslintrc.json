@@ -1,19 +1,25 @@
 {
-  // See http://eslint.org/docs/rules/
-  "extends": [
-        "eslint:recommended",
-        "plugin:security/recommended"
-  ],
-
   "env": {
-    "node": true,
+    "browser": true,
+    "commonjs": true,
     "es6": true
   },
-
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:security/recommended"
+  ],
   "parserOptions": {
-      "ecmaVersion": 8,
-      "sourceType": "module"
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
   },
+
+  "plugins": ["react"],
 
   "rules": {
     ////////// Possible Errors //////////
@@ -49,6 +55,8 @@
     "no-tabs": "error",
     "space-infix-ops": "warn",
     "space-unary-ops": "warn",
-    "quotes": "error"
+    "quotes": "off",
+    //// react /////
+    "react/prop-types": "off"
   }
 }
