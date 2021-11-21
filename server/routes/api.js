@@ -21,5 +21,15 @@ router.get("/", async function (req, res) {
     console.error(err);
   }
 });
+
+router.get("/:id", async function(req, res){
+  try{
+    let dao = new Dao();
+    const result = await dao.getDocById(req.params.id);
+    res.send(result);
+  }catch(err){
+    console.error(err);
+  }
+})
 module.exports = router;
  
