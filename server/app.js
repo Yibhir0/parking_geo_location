@@ -1,14 +1,17 @@
 /**
   * Link to all endPoint
  */
- "use srict"
+"use srict"
 
- const express = require("express");
- const app = express();
- const path = require("path");
+const express = require("express");
+const app = express();
+const path = require("path");
+const api = require("./routes/api.js");
  
 
- app.get("/api", api);
+app.use("/api", api);
+app.use(express.static(path.resolve(__dirname, '../client')));
+console.dir(__dirname)
   
 
- module.exports = app;
+module.exports = app;

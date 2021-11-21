@@ -113,6 +113,18 @@ class Dao {
     
     
   }
+
+  /**
+   * Method Retrieve whole document from database
+   */
+  async getAllDoc(){
+    try{
+      const result = await this.collection.find().toArray();
+      return result;
+    }catch(err){
+      console.error(err);
+    }
+  }
   
   /**
    * This method closes the connection
