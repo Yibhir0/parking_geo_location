@@ -38,7 +38,6 @@ router.get("/", async function (req, res) {
     let dao = new Dao();
     let allData = await dao.getAllDoc();
     res.send(allData);
-    await dao.close();
   }catch(err){
     console.error(err);
   }
