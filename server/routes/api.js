@@ -10,7 +10,13 @@ const express = require("express");
 const router = express.Router();
 const Dao = require("../db/conn");
 
-
+/**
+ * @swagger
+ * /api:
+ *   get:
+ *     summary: Retrieves all the documents from database.
+ *     description: Retrieves every single document from the collection.
+ */
 router.get("/", async function (req, res) {
   try{
     let dao = new Dao();
@@ -22,6 +28,13 @@ router.get("/", async function (req, res) {
   }
 });
 
+/**
+ * @swagger
+ * /api/:id:
+ *   get:
+ *     summary: Retrieves document with specific id.
+ *     description: Retrieves the selected document by giving an id value in the URL.
+ */
 router.get("/:id", async function(req, res){
   try{
     let dao = new Dao();
@@ -31,5 +44,6 @@ router.get("/:id", async function(req, res){
     console.error(err);
   }
 })
+
 module.exports = router;
  
