@@ -7,6 +7,9 @@
 // Mongodb client
 const { MongoClient } = require("mongodb");
 
+// Mongo ObjectId
+const ObjectId = require("mongodb").ObjectId; 
+
 
 
 // Environment Variable
@@ -26,7 +29,7 @@ class Dao {
     }
     
     // Mongodb variables 
-    this.client =  new MongoClient(process.env.ATLAS_URL);
+    this.client =  new MongoClient(process.env.ATLAS_URI);
     this.db = null;
     this.collection = null;
     
@@ -127,6 +130,34 @@ class Dao {
   
     }    
   }
+  
+  /**
+   * Method gets documents with a geospatial field within a polygon
+   * @param {Array of coordinates} coords 
+   * @returns array of documents
+   */
+  async getDocumentsWithinGeoPolygon(coords){
+    
+    let documents = await this.collection.find({
+      geo: {$geoWithin: 
+        {$geometry: {
+          
+          type: "Polygon",
+          
+          coordinates:[[
+                          [coords[0].coordinates[0], coords[0].coordinates[1]],
+                          [coords[1].coordinates[0], coords[0].coordinates[1]],
+                          [coords[2].coordinates[0], coords[0].coordinates[1]],
+                          [coords[3].coordinates[0], coords[0].coordinates[1]],
+                          [coords[0].coordinates[0], coords[0].coordinates[1]],  
+                      ]]
+        }}
+      }
+    });
+
+    return await documents.toArray();
+  }
+
 
   // Add 3 methods for endPoints
 
