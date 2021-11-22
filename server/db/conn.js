@@ -133,23 +133,23 @@ class Dao {
   
   /**
    * Method gets documents with a geospatial field within a polygon
-   * @param {Array of coordinates} coords 
+   * @param {Array of coordinates} coordinates
    * @returns array of documents
    */
-  async getDocumentsWithinGeoPolygon(coords){
+  async getDocumentsWithinGeoPolygon(coordinates){
     
     let documents = await this.collection.find({
-      geo: {$geoWithin: 
+      geometry: {$geoWithin: 
         {$geometry: {
           
           type: "Polygon",
           
           coordinates:[[
-                          [coords[0].coordinates[0], coords[0].coordinates[1]],
-                          [coords[1].coordinates[0], coords[0].coordinates[1]],
-                          [coords[2].coordinates[0], coords[0].coordinates[1]],
-                          [coords[3].coordinates[0], coords[0].coordinates[1]],
-                          [coords[0].coordinates[0], coords[0].coordinates[1]],  
+                          [coordinates["neLon"], coordinates["neLat"]],
+                          [coordinates["nwLon"], coordinates["nwLat"]],
+                          [coordinates["swLon"], coordinates["swLat"]],
+                          [coordinates["seLon"], coordinates["seLat"]],
+                          [coordinates["neLon"], coordinates["neLat"]],  
                       ]]
         }}
       }
