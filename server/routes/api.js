@@ -9,6 +9,22 @@
 const express = require("express");
 const router = express.Router();
 const Dao = require("../db/conn");
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+
+const swaggerDefinition = {
+  info:{
+    title: 'GeoJson api of parkings in Montreal',
+    version: '1.0.0',
+  },
+};
+
+const options = {
+  swaggerDefinition,
+  apis: ['./server/routes/*.js']
+}
+
+const swaggerSpec = swaggerJSDoc(options);
 
 /**
  * @swagger
@@ -30,12 +46,12 @@ router.get("/", async function (req, res) {
 
 /**
  * @swagger
- * /api/:id:
+ * /api/id/:id:
  *   get:
  *     summary: Retrieves document with specific id.
  *     description: Retrieves the selected document by giving an id value in the URL.
  */
-router.get("/:id", async function(req, res){
+router.get("/id/:id", async function(req, res){
   try{
     let dao = new Dao();
     const result = await dao.getDocById(req.params.id);
@@ -44,6 +60,8 @@ router.get("/:id", async function(req, res){
     console.error(err);
   }
 })
+
+router.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 module.exports = router;
  
