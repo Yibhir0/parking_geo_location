@@ -1,12 +1,12 @@
 /**
  * Connecting to database, creating a collection
  * , inserting many, and disconnecting.
- * @author Yassine Ibhir
+ * @author Yassine Ibhir & Estefan Maheux-Saban
 */
 
 // Mongodb client
 const { MongoClient } = require("mongodb");
-const ObjectId = require("mongodb").ObjectId;
+
 
 // Mongo ObjectId
 const ObjectId = require("mongodb").ObjectId; 
@@ -127,6 +127,7 @@ class Dao {
       return result;
     }catch(err){
       console.error(err);
+      throw err;
     }
   }
 
@@ -140,7 +141,8 @@ class Dao {
       const result = await this.collection.find(ObjectId(id)).toArray();
       return result;
     } catch(err){
-      console.error(err);
+      console.error(err.message);
+      throw err;
     }
   }
   

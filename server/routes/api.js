@@ -8,10 +8,16 @@
 
 const express = require("express");
 const router = express.Router();
- // Database module
+
+// Database module
 const Dao = require("../db/conn");
+
+// Swagger
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
+
+// Memory cache module
+const cache = require("memory-cache");
 
 // Parser middleware will parse the json payload
 router.use(express.json());
@@ -38,16 +44,67 @@ const swaggerSpec = swaggerJSDoc(options);
  *     description: Retrieves every single document from the collection.
  */
 router.get("/", async function (req, res) {
+
   try{
+    
+    // Get data from cache
+    let allData = cache.get("getAll");
     let dao = new Dao();
-    let allData = await dao.getAllDoc();
+    
+    // If data is not in cache
+    if(!allData){
+    
+      // Get from db
+      allData = await dao.getAllDoc();
+
+      // Put data in cache
+      cache.put("getAll", allData);
+    }
+    
     res.send(allData);
   }catch(err){
+    res.status(404).send({ "Error": err.message });
     console.error(err);
   }
-});
+}); 
 
- 
+//  /**
+//  * @swagger
+//  * /polygon:
+//  *   get:
+//  *     summary: Retrieves all tthe points within polygon.
+//  *     description: Retrieves every single points from the collection with a given polygon object. Uses coordinates.
+//  */
+//  // Routes to get documents within geospatial polygon.
+// router.get("/polygon", async function (req, res) {
+  
+// // Get the query string object
+// const polyObj = req.query;
+
+// // Validate if the query string contains valid keys and values
+// const validPolyPoints = validatePolygonPoints(polyObj);
+
+// // Get Dao intance
+// const dao = new Dao();
+
+//   if(validPolyPoints){
+    
+//     // Complete the other points of the polygon
+//     const polygon =  completePolygonPoints(validPolyPoints);
+
+//     // Get the document from database
+//     const documents = await dao.getDocumentsWithinGeoPolygon(polygon);
+    
+//     // Send Json response
+//     res.send(documents);
+
+//   }
+
+//   // Send 404
+//   else{
+//     res.status(404).send({ "Error": "Query string is not valid or existent" });
+//   }
+// });
 
  /**
  * @swagger
@@ -57,35 +114,35 @@ router.get("/", async function (req, res) {
  *     description: Retrieves every single points from the collection with a given polygon object. Uses coordinates.
  */
  // Routes to get documents within geospatial polygon.
-router.get("/polygon", async function (req, res) {
+ router.get("/polygon", async function (req, res) {
   
-  // Get the query string object
-  const polyObj = req.query;
 
-  // Validate if the query string contains valid keys and values
-  const validPolyPoints = validatePolygonPoints(polyObj);
+  try{
 
-  // Get Dao intance
-  const dao = new Dao();
-
-  if(validPolyPoints){
-    
-    // Complete the other points of the polygon
-    const polygon =  completePolygonPoints(validPolyPoints);
-    
-    // Get the document from database
-    const documents = await dao.getDocumentsWithinGeoPolygon(polygon);
-    
-    // Send Json response
-    res.send(documents);
-
+      // Get the query string object
+      const polyObj = req.query;
+  
+      // Validate if the query string contains valid keys and values
+      const validPolyPoints = validatePolygonPoints(polyObj);
+  
+      // Get Dao intance
+      const dao = new Dao();
+      
+      // Complete the other points of the polygon
+      const polygon =  completePolygonPoints(validPolyPoints);
+  
+      // Get the document from database
+      const documents = await dao.getDocumentsWithinGeoPolygon(polygon);
+      
+      // Send Json response
+      res.send(documents);
+ 
+    }
+  catch(err){
+    res.status(404).send({ "Error": err.message });
   }
 
-  // Send 404
-  else{
-    res.status(404).send({ "Error": "Query string is not valid or existent" });
-  }
-});
+  });
 
 /**
  * @swagger
@@ -97,16 +154,23 @@ router.get("/polygon", async function (req, res) {
 router.get("/id/:id", async function(req, res){
   try{
     let dao = new Dao();
+    // Get data from cache
+    let allData = cache.get("getAll");
     const result = await dao.getDocById(req.params.id);
     res.send(result);
   }catch(err){
-    console.error(err);
+    res.status(404).send({ "Error": err.message });
   }
 })
 
 router.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
  
-
+/**
+ * Adds more points to make a
+ * polygon.
+ * @param {*} polyObj 
+ * @returns 
+ */
 function completePolygonPoints(polyObj){
   polyObj.nwLat = polyObj.neLat;
   polyObj.nwLon = polyObj.swLon;
@@ -152,6 +216,7 @@ function validateNumeric(num){
   return isNaN(result) ? undefined : result;
 
 }
+
 
  
 module.exports = router;
