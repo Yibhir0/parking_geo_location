@@ -3,10 +3,14 @@
  *  Controllers for Api results
  * 1- endPoint that returns all documents
  * 2- endPoint that returns one document (id)
- * 3- endPoint returns documents within a rectangle 
+ * 3- endPoint returns documents within a rectangle
+ * @author Yassine & Estefan 
  */
 
+// Express module
 const express = require("express");
+
+// Initialize express router
 const router = express.Router();
 
 // Database module
@@ -19,8 +23,7 @@ const swaggerUI = require('swagger-ui-express');
 // Memory cache module
 const cache = require("memory-cache");
 
-// Parser middleware will parse the json payload
-router.use(express.json());
+
 
 const swaggerDefinition = {
   info:{
@@ -36,6 +39,10 @@ const options = {
 
 const swaggerSpec = swaggerJSDoc(options);
 
+
+// Parser middleware will parse the json payload
+router.use(express.json());
+
 /**
  * @swagger
  * /api:
@@ -47,8 +54,11 @@ router.get("/", async function (req, res) {
 
   try{
     
+    // Cache key 
+    const cacheK = "getAll";
+
     // Get data from cache
-    let allData = cache.get("getAll");
+    let allData = cache.get(cacheK);
     let dao = new Dao();
     
     // If data is not in cache
@@ -58,53 +68,17 @@ router.get("/", async function (req, res) {
       allData = await dao.getAllDoc();
 
       // Put data in cache
-      cache.put("getAll", allData);
+      cache.put(cacheK, allData);
     }
     
     res.send(allData);
+  // Response with 404 error
   }catch(err){
     res.status(404).send({ "Error": err.message });
     console.error(err);
   }
 }); 
 
-//  /**
-//  * @swagger
-//  * /polygon:
-//  *   get:
-//  *     summary: Retrieves all tthe points within polygon.
-//  *     description: Retrieves every single points from the collection with a given polygon object. Uses coordinates.
-//  */
-//  // Routes to get documents within geospatial polygon.
-// router.get("/polygon", async function (req, res) {
-  
-// // Get the query string object
-// const polyObj = req.query;
-
-// // Validate if the query string contains valid keys and values
-// const validPolyPoints = validatePolygonPoints(polyObj);
-
-// // Get Dao intance
-// const dao = new Dao();
-
-//   if(validPolyPoints){
-    
-//     // Complete the other points of the polygon
-//     const polygon =  completePolygonPoints(validPolyPoints);
-
-//     // Get the document from database
-//     const documents = await dao.getDocumentsWithinGeoPolygon(polygon);
-    
-//     // Send Json response
-//     res.send(documents);
-
-//   }
-
-//   // Send 404
-//   else{
-//     res.status(404).send({ "Error": "Query string is not valid or existent" });
-//   }
-// });
 
  /**
  * @swagger
@@ -116,24 +90,39 @@ router.get("/", async function (req, res) {
  // Routes to get documents within geospatial polygon.
  router.get("/polygon", async function (req, res) {
   
-
   try{
 
       // Get the query string object
       const polyObj = req.query;
+
+      // Cach key
+      const cacheK = polyObj.neLat+polyObj.neLon+polyObj.swLat+polyObj.swLon;
+
+      // Get data from cache
+      let documents = cache.get(cacheK);
+
+      if (!documents){
+
+        // Validate if the query string contains valid keys and values
+        const validPolyPoints = validatePolygonPoints(polyObj);
   
-      // Validate if the query string contains valid keys and values
-      const validPolyPoints = validatePolygonPoints(polyObj);
-  
-      // Get Dao intance
-      const dao = new Dao();
+        // Get Dao intance
+        const dao = new Dao();
       
-      // Complete the other points of the polygon
-      const polygon =  completePolygonPoints(validPolyPoints);
-  
-      // Get the document from database
-      const documents = await dao.getDocumentsWithinGeoPolygon(polygon);
-      
+        // Complete the other points of the polygon
+        const polygon =  completePolygonPoints(validPolyPoints);
+
+        // Get the document from database
+        documents = await dao.getDocumentsWithinGeoPolygon(polygon);
+
+        // We only store data when documents is not empty
+        if(documents.length > 0){
+          // Put data in cache
+          cache.put(cacheK, documents);
+        }
+        
+      }
+
       // Send Json response
       res.send(documents);
  
@@ -143,6 +132,7 @@ router.get("/", async function (req, res) {
   }
 
   });
+
 
 /**
  * @swagger
@@ -154,10 +144,26 @@ router.get("/", async function (req, res) {
 router.get("/id/:id", async function(req, res){
   try{
     let dao = new Dao();
+
+    // Cache key 
+    const cacheK = req.params.id;
     // Get data from cache
-    let allData = cache.get("getAll");
-    const result = await dao.getDocById(req.params.id);
-    res.send(result);
+    let document = cache.get(cacheK);
+
+    if(!document){
+      document = await dao.getDocById(cacheK);
+
+      // We only store data when documents is not empty
+      if(document.length > 0){
+        // Put data in cache
+        cache.put(cacheK, document);
+      }
+      
+      
+    }
+    
+    res.send(document);
+  
   }catch(err){
     res.status(404).send({ "Error": err.message });
   }
@@ -216,7 +222,5 @@ function validateNumeric(num){
   return isNaN(result) ? undefined : result;
 
 }
-
-
  
 module.exports = router;
