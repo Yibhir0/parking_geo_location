@@ -7,15 +7,55 @@
  */
 
 const express = require("express");
-
 const router = express.Router();
-
  // Database module
 const Dao = require("../db/conn");
- 
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+
 // Parser middleware will parse the json payload
 router.use(express.json());
+
+const swaggerDefinition = {
+  info:{
+    title: 'GeoJson api of parkings in Montreal',
+    version: '1.0.0',
+  },
+};
+
+const options = {
+  swaggerDefinition,
+  apis: ['./server/routes/*.js']
+}
+
+const swaggerSpec = swaggerJSDoc(options);
+
+/**
+ * @swagger
+ * /api:
+ *   get:
+ *     summary: Retrieves all the documents from database.
+ *     description: Retrieves every single document from the collection.
+ */
+router.get("/", async function (req, res) {
+  try{
+    let dao = new Dao();
+    let allData = await dao.getAllDoc();
+    res.send(allData);
+  }catch(err){
+    console.error(err);
+  }
+});
+
  
+
+ /**
+ * @swagger
+ * /polygon:
+ *   get:
+ *     summary: Retrieves all tthe points within polygon.
+ *     description: Retrieves every single points from the collection with a given polygon object. Uses coordinates.
+ */
  // Routes to get documents within geospatial polygon.
 router.get("/polygon", async function (req, res) {
   
@@ -48,10 +88,25 @@ router.get("/polygon", async function (req, res) {
 });
 
 /**
- * This method adds the point missing the polygon
- * @param {Object} polyObj 
- * @returns Objects with the other points added
+ * @swagger
+ * /api/id/:id:
+ *   get:
+ *     summary: Retrieves document with specific id.
+ *     description: Retrieves the selected document by giving an id value in the URL.
  */
+router.get("/id/:id", async function(req, res){
+  try{
+    let dao = new Dao();
+    const result = await dao.getDocById(req.params.id);
+    res.send(result);
+  }catch(err){
+    console.error(err);
+  }
+})
+
+router.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+ 
+
 function completePolygonPoints(polyObj){
   polyObj.nwLat = polyObj.neLat;
   polyObj.nwLon = polyObj.swLon;
@@ -99,4 +154,4 @@ function validateNumeric(num){
 }
 
  
- module.exports = router;
+module.exports = router;

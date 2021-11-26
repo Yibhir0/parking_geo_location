@@ -6,6 +6,7 @@
 
 // Mongodb client
 const { MongoClient } = require("mongodb");
+const ObjectId = require("mongodb").ObjectId;
 
 // Mongo ObjectId
 const ObjectId = require("mongodb").ObjectId; 
@@ -115,6 +116,32 @@ class Dao {
     }  
     
     
+  }
+
+  /**
+   * Method Retrieve whole document from database
+   */
+  async getAllDoc(){
+    try{
+      const result = await this.collection.find().toArray();
+      return result;
+    }catch(err){
+      console.error(err);
+    }
+  }
+
+/**
+ * Method to Retrieve specific document from id
+ * @param {id of document} id 
+ * @returns document query
+ */
+  async getDocById(id){
+    try{
+      const result = await this.collection.find(ObjectId(id)).toArray();
+      return result;
+    } catch(err){
+      console.error(err);
+    }
   }
   
   /**
