@@ -21,7 +21,7 @@ app.use(function (req, res, next) {
 
 app.use("/api", api);
 
-app.use(express.static(path.resolve(__dirname, '../client')));
+app.use(express.static(path.resolve(__dirname, "../client")));
   
 
 module.exports = app;

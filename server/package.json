@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "sh node_modules/.bin/jest"
   },
   "keywords": [],
   "author": "",
