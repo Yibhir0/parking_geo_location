@@ -26,6 +26,7 @@ const cache = require("memory-cache");
 
 
 const swaggerDefinition = {
+  openapi: "3.0.0",
   info:{
     title: 'GeoJson api of parkings in Montreal',
     version: '1.0.0',
@@ -49,6 +50,55 @@ router.use(express.json());
  *   get:
  *     summary: Retrieves all the documents from database.
  *     description: Retrieves every single document from the collection.
+ *     responses:
+ *      200:
+ *        description: List of all documents in DataBase.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                  _id:
+ *                    type: string
+ *                    description: The Point ID.
+ *                    example: 619986bc0a87d79f47c1f125
+ *                  LOCATION:
+ *                    type: string
+ *                    description: The location's name.
+ *                    example: "Rue Fleury near Chambord St. (parking 335)"
+ *                  HOURS:
+ *                    type: string
+ *                    description: The Hours of the Point.
+ *                    example: 3:00 pm to 07:00 am
+ *                  NBR_PLA_I:
+ *                    type: integer
+ *                    description: Number of place.
+ *                    example: 17
+ *                  NOTE_EN:
+ *                    type: string
+ *                    description: Note description of time
+ *                    example: Hourly spaces
+ *                  TYPE_PAY:
+ *                    type: integer
+ *                    description: Amount to pay
+ *                    example: 0
+ *                  geometry:
+ *                    type: object
+ *                    properties:
+ *                      type:
+ *                        type: string
+ *                        description: Type of geometry
+ *                        example: Point
+ *                      coordinates:
+ *                        type: array
+ *                        items:
+ *                          type: integer
+ *                        example: [-73.6584, 45.56]
+ *                          
+ *
+ *      
  */
 router.get("/", async function (req, res) {
 
@@ -82,10 +132,77 @@ router.get("/", async function (req, res) {
 
  /**
  * @swagger
- * /polygon:
+ * /api/polygon:
  *   get:
  *     summary: Retrieves all tthe points within polygon.
  *     description: Retrieves every single points from the collection with a given polygon object. Uses coordinates.
+ *     parameters:
+ *       - in: query
+ *         name: neLat
+ *         schema:
+ *           type: float  
+ *         description: The value of North-East Latitude
+ *       - in: query
+ *         name: neLon
+ *         schema:
+ *           type: float
+ *         description: The value of North-East Longitude
+ *       - in: query
+ *         name: swLat
+ *         schema:
+ *           type: float
+ *         description: The value of South-West Latitude  
+ *       - in: query
+ *         name: swLon
+ *         schema:
+ *           type: float
+ *         description: The value of South-West Longitude
+ *     responses:
+ *       200:
+ *         description: A list of points.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     description: The Point ID.
+ *                     example: 619986bc0a87d79f47c1f125
+ *                   LOCATION:
+ *                     type: string
+ *                     description: The location's name.
+ *                     example: "Rue Fleury near Chambord St. (parking 335)"
+ *                   HOURS:
+ *                     type: string
+ *                     description: The Hours of the Point.
+ *                     example: 3:00 pm to 07:00 am
+ *                   NBR_PLA_I:
+ *                     type: integer
+ *                     description: Number of place.
+ *                     example: 17
+ *                   NOTE_EN:
+ *                     type: string
+ *                     description: Note description of time
+ *                     example: Hourly spaces
+ *                   TYPE_PAY:
+ *                     type: integer
+ *                     description: Amount to pay
+ *                     example: 0
+ *                   geometry:
+ *                     type: object
+ *                     properties:
+ *                       type:
+ *                         type: string
+ *                         description: Type of geometry
+ *                         example: Point
+ *                       coordinates:
+ *                         type: array
+ *                         items:
+ *                           type: integer
+ *                         example: [-73.6584, 45.56]                
  */
  // Routes to get documents within geospatial polygon.
  router.get("/polygon", async function (req, res) {
@@ -136,10 +253,63 @@ router.get("/", async function (req, res) {
 
 /**
  * @swagger
- * /api/id/:id:
+ * /api/id/{id}:
  *   get:
  *     summary: Retrieves document with specific id.
  *     description: Retrieves the selected document by giving an id value in the URL.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Numeric ID of the parking to retrieve
+ *         schema: 
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of points.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     description: The Point ID.
+ *                     example: 619986bc0a87d79f47c1f125
+ *                   LOCATION:
+ *                     type: string
+ *                     description: The location's name.
+ *                     example: "Rue Fleury near Chambord St. (parking 335)"
+ *                   HOURS:
+ *                     type: string
+ *                     description: The Hours of the Point.
+ *                     example: 3:00 pm to 07:00 am
+ *                   NBR_PLA_I:
+ *                     type: integer
+ *                     description: Number of place.
+ *                     example: 17
+ *                   NOTE_EN:
+ *                     type: string
+ *                     description: Note description of time
+ *                     example: Hourly spaces
+ *                   TYPE_PAY:
+ *                     type: integer
+ *                     description: Amount to pay
+ *                     example: 0
+ *                   geometry:
+ *                     type: object
+ *                     properties:
+ *                       type:
+ *                         type: string
+ *                         description: Type of geometry
+ *                         example: Point
+ *                       coordinates:
+ *                         type: array
+ *                         items:
+ *                           type: integer
+ *                         example: [-73.6584, 45.56]
  */
 router.get("/id/:id", async function(req, res){
   try{
