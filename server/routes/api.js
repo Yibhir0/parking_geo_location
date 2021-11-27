@@ -157,8 +157,7 @@ router.get("/id/:id", async function(req, res){
       if(document.length > 0){
         // Put data in cache
         cache.put(cacheK, document);
-      }
-      
+      }    
       
     }
     
