@@ -34,7 +34,7 @@ describe("GET /api ", () => {
   }); 
 
     
-  describe("GET /api/polygon/?neLat=val&neLon=val&swLat=val&swLon=val ", () => {
+  describe("GET /api/polygon/?neLat=val&neLon=val&swLat=val&swLon=val", () => {
     test("It should response with an array of json object", async () => {
       const resolvedValue = [{ "geo": "polygon" }]
       jest.spyOn(Dao.prototype, "getDocumentsWithinGeoPolygon").mockResolvedValue(resolvedValue)
