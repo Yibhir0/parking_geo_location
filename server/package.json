@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "eslint-plugin-security": "^1.4.0",
     "jest": "^27.3.1",
     "supertest": "^6.1.6",
     "swagger-jsdoc": "^6.1.0",

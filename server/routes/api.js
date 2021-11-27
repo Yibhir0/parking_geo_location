@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  *  All the routes 
  *  Controllers for Api results
@@ -17,8 +18,8 @@ const router = express.Router();
 const Dao = require("../db/conn");
 
 // Swagger
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUI = require('swagger-ui-express');
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
 
 // Memory cache module
 const cache = require("memory-cache");
@@ -28,14 +29,14 @@ const cache = require("memory-cache");
 const swaggerDefinition = {
   openapi: "3.0.0",
   info:{
-    title: 'GeoJson api of parkings in Montreal',
-    version: '1.0.0',
+    title: "GeoJson api of parkings in Montreal",
+    version: "1.0.0",
   },
 };
 
 const options = {
   swaggerDefinition,
-  apis: ['./server/routes/*.js']
+  apis: ["./server/routes/*.js"]
 }
 
 const swaggerSpec = swaggerJSDoc(options);
@@ -130,7 +131,7 @@ router.get("/", async function (req, res) {
 }); 
 
 
- /**
+/**
  * @swagger
  * /api/polygon:
  *   get:
@@ -204,51 +205,50 @@ router.get("/", async function (req, res) {
  *                           type: integer
  *                         example: [-73.6584, 45.56]                
  */
- // Routes to get documents within geospatial polygon.
- router.get("/polygon", async function (req, res) {
+// Routes to get documents within geospatial polygon.
+router.get("/polygon", async function (req, res) {
   
   try{
 
-      // Get the query string object
-      const polyObj = req.query;
+    // Get the query string object
+    const polyObj = req.query;
 
-      // Cach key
-      const cacheK = polyObj.neLat+polyObj.neLon+polyObj.swLat+polyObj.swLon;
+    // Cach key
+    const cacheK = polyObj.neLat + polyObj.neLon + polyObj.swLat + polyObj.swLon;
 
-      // Get data from cache
-      let documents = cache.get(cacheK);
+    // Get data from cache
+    let documents = cache.get(cacheK);
 
-      if (!documents){
+    if (!documents){
 
-        // Validate if the query string contains valid keys and values
-        const validPolyPoints = validatePolygonPoints(polyObj);
+      // Validate if the query string contains valid keys and values
+      const validPolyPoints = validatePolygonPoints(polyObj);
   
-        // Get Dao intance
-        const dao = new Dao();
+      // Get Dao intance
+      const dao = new Dao();
       
-        // Complete the other points of the polygon
-        const polygon =  completePolygonPoints(validPolyPoints);
+      // Complete the other points of the polygon
+      const polygon =  completePolygonPoints(validPolyPoints);
 
-        // Get the document from database
-        documents = await dao.getDocumentsWithinGeoPolygon(polygon);
+      // Get the document from database
+      documents = await dao.getDocumentsWithinGeoPolygon(polygon);
 
-        // We only store data when documents is not empty
-        if(documents.length > 0){
-          // Put data in cache
-          cache.put(cacheK, documents);
-        }
-        
+      // We only store data when documents is not empty
+      if(documents.length > 0){
+        // Put data in cache
+        cache.put(cacheK, documents);
       }
-
-      // Send Json response
-      res.send(documents);
- 
+        
     }
-  catch(err){
+
+    // Send Json response
+    res.send(documents);
+ 
+  } catch(err){
     res.status(404).send({ "Error": err.message });
   }
 
-  });
+});
 
 
 /**
@@ -338,7 +338,7 @@ router.get("/id/:id", async function(req, res){
   }
 })
 
-router.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+router.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
  
 /**
  * Adds more points to make a
@@ -365,19 +365,22 @@ function completePolygonPoints(polyObj){
  */
 function validatePolygonPoints(polyObj){
   let coordinates = {}
-  if(polyObj.neLat != undefined && polyObj.neLon != undefined && polyObj.swLat != undefined && polyObj.swLon != undefined){
+  if(polyObj.neLat !== undefined &&
+     polyObj.neLon !== undefined &&
+      polyObj.swLat !== undefined &&
+       polyObj.swLon !== undefined){
     
     Object.keys(polyObj).forEach(k => {
-      let result = validateNumeric(polyObj[k]);
+      let result = validateNumeric(polyObj[k.toString()]);
       
       if(result){
-        coordinates[k] = result
+        coordinates[k.toString()] = result
       }
   
     });
   }
 
-  return Object.keys(coordinates).length == 4 ?  coordinates : undefined;
+  return Object.keys(coordinates).length === 4 ?  coordinates : undefined;
   
 }
 
