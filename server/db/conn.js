@@ -131,7 +131,7 @@ class Dao {
     }
   }
 
-/**
+  /**
  * Method to Retrieve specific document from id
  * @param {id of document} id 
  * @returns document query
@@ -174,12 +174,12 @@ class Dao {
           type: "Polygon",
           
           coordinates:[[
-                          [coordinates["neLon"], coordinates["neLat"]],
-                          [coordinates["nwLon"], coordinates["nwLat"]],
-                          [coordinates["swLon"], coordinates["swLat"]],
-                          [coordinates["seLon"], coordinates["seLat"]],
-                          [coordinates["neLon"], coordinates["neLat"]],  
-                      ]]
+            [coordinates["neLon"], coordinates["neLat"]],
+            [coordinates["nwLon"], coordinates["nwLat"]],
+            [coordinates["swLon"], coordinates["swLat"]],
+            [coordinates["seLon"], coordinates["seLat"]],
+            [coordinates["neLon"], coordinates["neLat"]],  
+          ]]
         }}
       }
     });
