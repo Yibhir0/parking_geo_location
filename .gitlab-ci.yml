@@ -15,7 +15,7 @@ build:
     expire_in: 1 days
     when: on_success
     paths:
-      - node_modules/
+      - server/node_modules/
 
 test:
   stage: test
