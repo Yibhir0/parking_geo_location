@@ -16,12 +16,5 @@
   "bugs": {
     "url": "https://gitlab.com/Yassine.Ibhir/520-project-ibhir-maheux-saban/issues"
   },
-  "homepage": "https://gitlab.com/Yassine.Ibhir/520-project-ibhir-maheux-saban#readme",
-  "dependencies": {
-    "compression": "^1.7.4",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "memory-cache": "^0.2.0",
-    "mongodb": "^4.2.0"
-  }
+  "homepage": "https://gitlab.com/Yassine.Ibhir/520-project-ibhir-maheux-saban#readme"
 }
