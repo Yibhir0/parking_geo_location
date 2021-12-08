@@ -15,8 +15,26 @@ class ParkingMap extends Component {
     super(props)
     this.state = {
       points: [],
-      selected: null,
+      selectedSreet: null,
+
     }
+  }
+
+  async componentDidMount() {
+    this.setState({ points: await this.fetchAll() })
+
+  }
+
+  async fetchAll() {
+    const response = await fetch("/api");
+    if (response.ok) {
+      const allData = await response.json();
+      console.log(allData);
+      return allData;
+    }
+    return [];
+
+
   }
 
   render() {

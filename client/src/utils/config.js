@@ -16,7 +16,7 @@ const MapConfig = {
   ],
   minZoom: 1,
   maxZoom: 18,
-  intitialZoom: 8
+  intitialZoom: 14
 }
 
 export default MapConfig;
