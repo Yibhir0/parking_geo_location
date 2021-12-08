@@ -11,8 +11,8 @@ const MapConfig = {
   tileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   center: [45.5017, -73.5673],
   bounds: [
-    [-73.9890, 45.9111],
-    [-73.1200, 45.2222]
+    [-73.1200, 45.2222],
+    [-73.9890, 45.9111]
   ],
   minZoom: 1,
   maxZoom: 18,

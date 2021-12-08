@@ -14,9 +14,24 @@ class ParkingMap extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      points: [[45.5017, -73.5673]],
+      parkingArr: [],
       selected: null,
     }
+  }
+
+  async componentDidMount(){
+    await this.fetchAll();
+  }
+
+  async fetchAll(){
+    const allData = await fetch("/api/polygon?neLat=" + this.props.bounds[0][1] 
+    + "&neLon=" + this.props.bounds[0][0] 
+    + "&swLon=" + this.props.bounds[1][0] 
+    + "&swLat=" + this.props.bounds[1][1] );
+    const djson = await allData.json();
+    this.setState({
+      parkingArr: djson,
+    });
   }
 
   render() {
@@ -49,20 +64,19 @@ class ParkingMap extends Component {
             removeOutsideVisibleBounds={false}
             disableClusteringAtZoom={this.props.maxZoom}
           >
-            {this.state.points.map((item, index) =>
+            {this.state.parkingArr.map((item, index) =>
               <CircleMarker
                 key={index}
                 color={"red"}
                 opacity={1}
                 radius={5}
                 weight={1}
-                center={[45.5017, -73.5673]}
-              // center={item.geometry.coordinates}
-              // eventHandlers={{
-              //   click: () => {
-              //     this.setState({ selected: item });
-              //   }
-              // }} 
+                center={[item.geometry.coordinates[1], item.geometry.coordinates[0]]}
+                // center={item.geometry.coordinates}
+                eventHandlers={{
+                  click: () => {
+                    this.setState({ selected: item });
+                  }, }}
               />
             )}
 

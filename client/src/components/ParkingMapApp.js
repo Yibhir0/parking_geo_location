@@ -14,6 +14,7 @@ class ParkingMapApp extends Component {
         zoom = {MapConfig.intitialZoom}
         minZoom = {MapConfig.minZoom}
         maxZoom = {MapConfig.maxZoom}
+        bounds = {MapConfig.bounds}
       />
     )
   }
