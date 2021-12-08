@@ -8,7 +8,7 @@ const MapConfig = {
 
   // eslint-disable-next-line max-len
   attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
-  tileUrl: "https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png",
+  tileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   center: [45.5017, -73.5673],
   
   bounds : {
