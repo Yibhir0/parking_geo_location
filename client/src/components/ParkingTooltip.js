@@ -4,11 +4,12 @@ import React, { Component } from "react";
 class ParkingTooltip extends Component {
 
   render(){
-    console.log("hello");
     return (
-        
+      //Display the tooltip with the props given
       <div>
-        <h1>{"HELLO CAR"}</h1>
+        <h2>{this.props.parking.LOCATION}</h2>
+        <p>Hours: {this.props.parking.HOURS}</p>
+        <p>Number Of Place: {this.props.parking.NBR_PLA_I}</p>
       </div>
     )
   }

@@ -25,19 +25,28 @@ class ParkingMap extends Component {
     }
   }
 
-
+  /**
+   * Fetch all data when component mounts. 
+   */
   async componentDidMount(){
 
     await this.fetchAll();
     
   }
 
+  /**
+   * Fetch data when component updates
+   * @param {*} prevProps 
+   */
   async componentDidUpdate(prevProps){
     if (prevProps.bounds !== this.props.bounds) {
       await this.fetchAll();
     }
   }
 
+  /**
+   * Fetch all the data within a certain bounds
+   */
   async fetchAll(){
     
     const response = await fetch("/api/polygon?neLat=" + this.props.bounds._southWest.lat 
