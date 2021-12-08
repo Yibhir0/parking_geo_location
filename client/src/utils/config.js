@@ -10,13 +10,20 @@ const MapConfig = {
   attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
   tileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   center: [45.5017, -73.5673],
-  bounds: [
-    [-73.1200, 45.2222],
-    [-73.9890, 45.9111]
-  ],
+  
+  bounds : {
+    _southWest: {
+      lat: 45.2222, 
+      lng: -73.1200
+    },
+    _northEast: {
+      lat:  45.9111, 
+      lng: -73.9890
+    }
+  }, 
   minZoom: 1,
   maxZoom: 18,
-  intitialZoom: 14
+  intitialZoom: 8
 }
 
 export default MapConfig;

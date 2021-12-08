@@ -4,10 +4,15 @@ import {
   MapContainer,
   TileLayer,
   CircleMarker,
+  Popup
 } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-markercluster/dist/styles.min.css";
+
+import Bounds from "./Bounds";
+
+import ParkingTooltip from "./ParkingTooltip";
 
 class ParkingMap extends Component {
 
@@ -21,17 +26,24 @@ class ParkingMap extends Component {
   }
 
 
-  async componentDidMount(prevProps){
-     if (prevProps.bounds !== this.props.bounds) {
-        await this.fetchAll();
-     }
+  async componentDidMount(){
+
+    await this.fetchAll();
+    
+  }
+
+  async componentDidUpdate(prevProps){
+    if (prevProps.bounds !== this.props.bounds) {
+      await this.fetchAll();
+    }
   }
 
   async fetchAll(){
-    const response = await fetch("/api/polygon?neLat=" + this.props.bounds[0][1] 
-    + "&neLon=" + this.props.bounds[0][0] 
-    + "&swLon=" + this.props.bounds[1][0] 
-    + "&swLat=" + this.props.bounds[1][1] );
+    
+    const response = await fetch("/api/polygon?neLat=" + this.props.bounds._southWest.lat 
+    + "&neLon=" + this.props.bounds._southWest.lng 
+    + "&swLon=" + this.props.bounds._northEast.lat 
+    + "&swLat=" + this.props.bounds._northEast.lng);
 
     if(response.ok){
       
@@ -41,8 +53,26 @@ class ParkingMap extends Component {
         parkingArr: djson,
       });
     }
-    
-    
+  }
+
+  getPosition(){
+    if(this.state.selected !== null){
+      return [this.state.selected.geometry.coordinates[1],
+        this.state.selected.geometry.coordinates[0]];
+    }
+  }
+
+  popUp(){
+    if(this.state.selected !== null){
+      
+      return <Popup 
+        position= {this.getPosition()}
+        onClose = {() => this.setState({ selected: null }) }
+      >
+        <ParkingTooltip parking={this.state.selected} />
+      </Popup >
+    }
+  
   }
 
 
@@ -79,12 +109,11 @@ class ParkingMap extends Component {
             {this.state.parkingArr.map((item, index) =>
               <CircleMarker
                 key={index}
-                color={"red"}
+                color={"blue"}
                 opacity={1}
                 radius={5}
                 weight={1}
                 center={[item.geometry.coordinates[1], item.geometry.coordinates[0]]}
-                // center={item.geometry.coordinates}
                 eventHandlers={{
                   click: () => {
                     this.setState({ selected: item });
@@ -93,10 +122,15 @@ class ParkingMap extends Component {
             )}
 
           </MarkerClusterGroup>
+
+          {this.popUp()}           
+
+          <Bounds action = {this.props.action}/>
         </MapContainer>
       </div>
     )
   }
+  
 
 }
 
