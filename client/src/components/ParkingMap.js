@@ -14,28 +14,37 @@ class ParkingMap extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      points: [],
-      selectedSreet: null,
+      parkingArr: [],
+      selected: null,
 
     }
   }
 
-  async componentDidMount() {
-    this.setState({ points: await this.fetchAll() })
 
+  async componentDidMount(prevProps){
+     if (prevProps.bounds !== this.props.bounds) {
+        await this.fetchAll();
+     }
   }
 
-  async fetchAll() {
-    const response = await fetch("/api");
-    if (response.ok) {
-      const allData = await response.json();
-      console.log(allData);
-      return allData;
+  async fetchAll(){
+    const response = await fetch("/api/polygon?neLat=" + this.props.bounds[0][1] 
+    + "&neLon=" + this.props.bounds[0][0] 
+    + "&swLon=" + this.props.bounds[1][0] 
+    + "&swLat=" + this.props.bounds[1][1] );
+
+    if(response.ok){
+      
+      const djson = await response.json();
+
+      this.setState({
+        parkingArr: djson,
+      });
     }
-    return [];
-
-
+    
+    
   }
+
 
   render() {
     return (
@@ -67,20 +76,19 @@ class ParkingMap extends Component {
             removeOutsideVisibleBounds={false}
             disableClusteringAtZoom={this.props.maxZoom}
           >
-            {this.state.points.map((item, index) =>
+            {this.state.parkingArr.map((item, index) =>
               <CircleMarker
                 key={index}
                 color={"red"}
                 opacity={1}
                 radius={5}
                 weight={1}
-                center={[45.5017, -73.5673]}
-              // center={item.geometry.coordinates}
-              // eventHandlers={{
-              //   click: () => {
-              //     this.setState({ selected: item });
-              //   }
-              // }} 
+                center={[item.geometry.coordinates[1], item.geometry.coordinates[0]]}
+                // center={item.geometry.coordinates}
+                eventHandlers={{
+                  click: () => {
+                    this.setState({ selected: item });
+                  }, }}
               />
             )}
 
