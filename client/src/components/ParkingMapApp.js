@@ -4,6 +4,15 @@ import ParkingMap from "./ParkingMap";
 import MapConfig from "../utils/config";
 class ParkingMapApp extends Component {
     
+  constructor(props){
+    super(props)
+    this.state = {bounds : MapConfig.bounds}
+    this.setBounds = this.setBounds.bind(this);
+  }
+
+  setBounds(newBounds){
+    this.setState({bounds : newBounds});
+  }
 
   render(){
     return (
@@ -14,6 +23,7 @@ class ParkingMapApp extends Component {
         zoom = {MapConfig.intitialZoom}
         minZoom = {MapConfig.minZoom}
         maxZoom = {MapConfig.maxZoom}
+        action = {this.setBounds}
       />
     )
   }

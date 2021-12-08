@@ -14,7 +14,7 @@ class ParkingMap extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      points: [[45.5017, -73.5673]],
+      points: [],
       selected: null,
     }
   }
