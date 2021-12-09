@@ -6,6 +6,7 @@ import {
   CircleMarker,
   Popup
 } from "react-leaflet";
+
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-markercluster/dist/styles.min.css";
@@ -26,27 +27,27 @@ class ParkingMap extends Component {
   }
 
 
-  async componentDidMount(){
+  async componentDidMount() {
 
     await this.fetchAll();
-    
+
   }
 
-  async componentDidUpdate(prevProps){
+  async componentDidUpdate(prevProps) {
     if (prevProps.bounds !== this.props.bounds) {
       await this.fetchAll();
     }
   }
 
-  async fetchAll(){
-    
-    const response = await fetch("/api/polygon?neLat=" + this.props.bounds._southWest.lat 
-    + "&neLon=" + this.props.bounds._southWest.lng 
-    + "&swLon=" + this.props.bounds._northEast.lat 
-    + "&swLat=" + this.props.bounds._northEast.lng);
+  async fetchAll() {
 
-    if(response.ok){
-      
+    const response = await fetch("/api/polygon?neLat=" + this.props.bounds._southWest.lat
+      + "&neLon=" + this.props.bounds._southWest.lng
+      + "&swLon=" + this.props.bounds._northEast.lat
+      + "&swLat=" + this.props.bounds._northEast.lng);
+
+    if (response.ok) {
+
       const djson = await response.json();
 
       this.setState({
@@ -55,24 +56,24 @@ class ParkingMap extends Component {
     }
   }
 
-  getPosition(){
-    if(this.state.selected !== null){
+  getPosition() {
+    if (this.state.selected !== null) {
       return [this.state.selected.geometry.coordinates[1],
         this.state.selected.geometry.coordinates[0]];
     }
   }
 
-  popUp(){
-    if(this.state.selected !== null){
-      
-      return <Popup 
-        position= {this.getPosition()}
-        onClose = {() => this.setState({ selected: null }) }
+  popUp() {
+    if (this.state.selected !== null) {
+
+      return <Popup
+        position={this.getPosition()}
+        onClose={() => this.setState({ selected: null })}
       >
         <ParkingTooltip parking={this.state.selected} />
       </Popup >
     }
-  
+
   }
 
 
@@ -117,21 +118,20 @@ class ParkingMap extends Component {
                 eventHandlers={{
                   click: () => {
                     this.setState({ selected: item });
-                  }, }}
+                  },
+                }}
               />
             )}
 
           </MarkerClusterGroup>
 
-          {this.popUp()}           
+          {this.popUp()}
 
-          <Bounds action = {this.props.action}/>
+          <Bounds action={this.props.action} />
         </MapContainer>
       </div>
     )
   }
-  
-
 }
 
 export default ParkingMap;
