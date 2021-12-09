@@ -6,6 +6,7 @@ import {
 function Bounds(props) {
   const mapEvents = useMapEvents({
     "moveend": () => {
+      console.log(mapEvents.getBounds());
       props.action(mapEvents.getBounds());
     },
     "zoom": () => {

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 class ParkingTooltip extends Component {
 
-  render(){
+  render() {
     return (
       //Display the tooltip with the props given
       <div>

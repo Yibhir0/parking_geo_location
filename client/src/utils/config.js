@@ -10,17 +10,18 @@ const MapConfig = {
   attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
   tileUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   center: [45.5017, -73.5673],
-  
-  bounds : {
+
+  // The format mapEvents.getBounds() returns
+  bounds: {
     _southWest: {
-      lat: 45.2222, 
+      lat: 45.2222,
       lng: -73.1200
     },
     _northEast: {
-      lat:  45.9111, 
+      lat: 45.9111,
       lng: -73.9890
     }
-  }, 
+  },
   minZoom: 1,
   maxZoom: 18,
   intitialZoom: 8
