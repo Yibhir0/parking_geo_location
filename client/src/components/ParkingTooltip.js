@@ -9,7 +9,7 @@ class ParkingTooltip extends Component {
       <div>
         <h2>{this.props.parking.LOCATION}</h2>
         <p>Hours: {this.props.parking.HOURS}</p>
-        <p>Number Of Place: {this.props.parking.NBR_PLA_I}</p>
+        <p>Number Of Places: {this.props.parking.NBR_PLA_I}</p>
       </div>
     )
   }
