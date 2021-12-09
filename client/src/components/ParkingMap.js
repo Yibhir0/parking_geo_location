@@ -22,6 +22,17 @@ import Bounds from "./Bounds";
 
 import ParkingTooltip from "./ParkingTooltip";
 
+/**
+ * Class component renders react-leaftlet map component.
+ * The Component's state contains a list of parking streets
+ * in the city of montreal and the selected street. When the component
+ * is initially invoked, react lifecycle method componentdidMount
+ * fetches data within the initial bounds the parent sent as props.
+ * After that react lifecycle method componentdidUpdate will fetche data
+ * and setState whenever the bounds change. The data retrieved from the server
+ * will be used for markers attributes and the tooltip display.
+ */
+
 class ParkingMap extends Component {
 
   constructor(props) {
@@ -70,7 +81,11 @@ class ParkingMap extends Component {
       });
     }
   }
-
+  /**
+   * Helper method returns the position of
+   * the popUp attribute.
+   * @returns array of latitude and longtitude.
+   */
   getPopUpPosition() {
     if (this.state.selected !== null) {
       return [this.state.selected.geometry.coordinates[1],
@@ -78,7 +93,14 @@ class ParkingMap extends Component {
     }
   }
 
+  /**
+   * This method checks if the selected street is not
+   * null and returns the popUp component. The popUp contains
+   * a custom toolTip component that displays data given as props.
+   * @returns PopUp component
+   */
   popUp() {
+
     if (this.state.selected !== null) {
 
       return <Popup
@@ -91,7 +113,11 @@ class ParkingMap extends Component {
 
   }
 
-
+  /**
+   * Method returns a MapContainer with all other components
+   * (TileLayer, Markers, ToolTip and the Bounds)needed to render a map.
+   * @returns map
+   */
   render() {
     return (
       <div>
@@ -138,7 +164,6 @@ class ParkingMap extends Component {
           </MarkerClusterGroup>
 
           {this.popUp()}
-
           <Bounds action={this.props.action} />
         </MapContainer>
       </div>

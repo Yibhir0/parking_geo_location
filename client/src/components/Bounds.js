@@ -2,11 +2,17 @@ import {
   useMapEvents,
 } from "react-leaflet";
 
-//react-leaflet hook
+/**
+ * React-leaflet hook provided by Professor Jaya.
+ * The hook invokes the callback in the props everytime the map
+ * is panned or zoomed. When the new bounds are retrieved (mapEvents.getBounds()),
+ * the bounds state in the main app are set to new bounds. 
+ * @param {*} props 
+ * @returns 
+ */
 function Bounds(props) {
   const mapEvents = useMapEvents({
     "moveend": () => {
-      console.log(mapEvents.getBounds());
       props.action(mapEvents.getBounds());
     },
     "zoom": () => {
