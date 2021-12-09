@@ -3,9 +3,16 @@ import React, { Component } from "react";
 import {
   MapContainer,
   TileLayer,
-  CircleMarker,
+  Marker,
   Popup
 } from "react-leaflet";
+
+import { Icon } from "leaflet";
+
+const icon = new Icon({
+  iconUrl: "/parking-g373592982_640.png",
+  iconSize: [20, 20]
+});
 
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import "leaflet/dist/leaflet.css";
@@ -26,37 +33,45 @@ class ParkingMap extends Component {
     }
   }
 
-
+  /**
+   * Fetch all data when component mounts. 
+   */
   async componentDidMount() {
 
     await this.fetchAll();
 
   }
 
+  /**
+   * Fetch data when component updates
+   * @param {*} prevProps 
+   */
   async componentDidUpdate(prevProps) {
+
     if (prevProps.bounds !== this.props.bounds) {
       await this.fetchAll();
     }
   }
 
+  /**
+   * Fetch all the data within a certain bounds
+   */
   async fetchAll() {
 
-    const response = await fetch("/api/polygon?neLat=" + this.props.bounds._southWest.lat
-      + "&neLon=" + this.props.bounds._southWest.lng
-      + "&swLon=" + this.props.bounds._northEast.lat
-      + "&swLat=" + this.props.bounds._northEast.lng);
+    const response = await fetch("/api/polygon?neLat=" + this.props.bounds._northEast.lat
+      + "&neLon=" + this.props.bounds._northEast.lng
+      + "&swLon=" + this.props.bounds._southWest.lng
+      + "&swLat=" + this.props.bounds._southWest.lat);
 
     if (response.ok) {
-
       const djson = await response.json();
-
       this.setState({
         parkingArr: djson,
       });
     }
   }
 
-  getPosition() {
+  getPopUpPosition() {
     if (this.state.selected !== null) {
       return [this.state.selected.geometry.coordinates[1],
         this.state.selected.geometry.coordinates[0]];
@@ -67,7 +82,7 @@ class ParkingMap extends Component {
     if (this.state.selected !== null) {
 
       return <Popup
-        position={this.getPosition()}
+        position={this.getPopUpPosition()}
         onClose={() => this.setState({ selected: null })}
       >
         <ParkingTooltip parking={this.state.selected} />
@@ -108,18 +123,15 @@ class ParkingMap extends Component {
             disableClusteringAtZoom={this.props.maxZoom}
           >
             {this.state.parkingArr.map((item, index) =>
-              <CircleMarker
+              <Marker
                 key={index}
-                color={"blue"}
-                opacity={1}
-                radius={5}
-                weight={1}
-                center={[item.geometry.coordinates[1], item.geometry.coordinates[0]]}
+                position={[item.geometry.coordinates[1], item.geometry.coordinates[0]]}
                 eventHandlers={{
                   click: () => {
                     this.setState({ selected: item });
                   },
                 }}
+                icon={icon}
               />
             )}
 

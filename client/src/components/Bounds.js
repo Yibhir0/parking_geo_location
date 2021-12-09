@@ -1,9 +1,9 @@
-import { 
+import {
   useMapEvents,
 } from "react-leaflet";
 
 //react-leaflet hook
-function Bounds(props) {    
+function Bounds(props) {
   const mapEvents = useMapEvents({
     "moveend": () => {
       props.action(mapEvents.getBounds());
@@ -11,9 +11,9 @@ function Bounds(props) {
     "zoom": () => {
       props.action(mapEvents.getBounds());
     },
-  }); 
-  return null 
-} 
+  });
+  return null
+}
 
 export default Bounds;
 
