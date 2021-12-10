@@ -54,3 +54,6 @@ When Moving around:
 	- ~10-60ms for tiles
 	- queries take around 40ms.
 
+## Performance pertaining to server cashing and compression.
+
+ 
