@@ -28,7 +28,7 @@ const cache = require("memory-cache");
 
 const swaggerDefinition = {
   openapi: "3.0.0",
-  info:{
+  info: {
     title: "GeoJson api of parkings in Montreal",
     version: "1.0.0",
   },
@@ -103,32 +103,32 @@ router.use(express.json());
  */
 router.get("/", async function (req, res) {
 
-  try{
-    
+  try {
+
     // Cache key 
     const cacheK = "getAll";
 
     // Get data from cache
     let allData = cache.get(cacheK);
     let dao = new Dao();
-    
+
     // If data is not in cache
-    if(!allData){
-    
+    if (!allData) {
+
       // Get from db
       allData = await dao.getAllDoc();
 
       // Put data in cache
       cache.put(cacheK, allData);
     }
-    
+
     res.send(allData);
-  // Response with 404 error
-  }catch(err){
+    // Response with 404 error
+  } catch (err) {
     res.status(404).send({ "Error": err.message });
     console.error(err);
   }
-}); 
+});
 
 
 /**
@@ -207,44 +207,44 @@ router.get("/", async function (req, res) {
  */
 // Routes to get documents within geospatial polygon.
 router.get("/polygon", async function (req, res) {
-  
-  try{
+
+  try {
 
     // Get the query string object
     const polyObj = req.query;
 
     // Cach key
-    const cacheK = polyObj.neLat + polyObj.neLon + polyObj.swLat + polyObj.swLon;
+    //const cacheK = polyObj.neLat + polyObj.neLon + polyObj.swLat + polyObj.swLon;
 
     // Get data from cache
-    let documents = cache.get(cacheK);
+    //let documents = cache.get(cacheK);
 
-    if (!documents){
+    // if (!documents) {
 
-      // Validate if the query string contains valid keys and values
-      const validPolyPoints = validatePolygonPoints(polyObj);
-  
-      // Get Dao intance
-      const dao = new Dao();
-      
-      // Complete the other points of the polygon
-      const polygon =  completePolygonPoints(validPolyPoints);
+    // Validate if the query string contains valid keys and values
+    const validPolyPoints = validatePolygonPoints(polyObj);
 
-      // Get the document from database
-      documents = await dao.getDocumentsWithinGeoPolygon(polygon);
+    // Get Dao intance
+    const dao = new Dao();
 
-      // We only store data when documents is not empty
-      if(documents.length > 0){
-        // Put data in cache
-        cache.put(cacheK, documents);
-      }
-        
-    }
+    // Complete the other points of the polygon
+    const polygon = completePolygonPoints(validPolyPoints);
+
+    // Get the document from database
+    documents = await dao.getDocumentsWithinGeoPolygon(polygon);
+
+    // We only store data when documents is not empty
+    // if (documents.length > 0) {
+    //   // Put data in cache
+    //   cache.put(cacheK, documents);
+    // }
+
+    //}
 
     // Send Json response
     res.send(documents);
- 
-  } catch(err){
+
+  } catch (err) {
     res.status(404).send({ "Error": err.message });
   }
 
@@ -311,8 +311,8 @@ router.get("/polygon", async function (req, res) {
  *                           type: integer
  *                         example: [-73.6584, 45.56]
  */
-router.get("/id/:id", async function(req, res){
-  try{
+router.get("/id/:id", async function (req, res) {
+  try {
     let dao = new Dao();
 
     // Cache key 
@@ -320,33 +320,33 @@ router.get("/id/:id", async function(req, res){
     // Get data from cache
     let document = cache.get(cacheK);
 
-    if(!document){
+    if (!document) {
       document = await dao.getDocById(cacheK);
 
       // We only store data when documents is not empty
-      if(document.length > 0){
+      if (document.length > 0) {
         // Put data in cache
         cache.put(cacheK, document);
-      }    
-      
+      }
+
     }
-    
+
     res.send(document);
-  
-  }catch(err){
+
+  } catch (err) {
     res.status(404).send({ "Error": err.message });
   }
 })
 
 router.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
- 
+
 /**
  * Adds more points to make a
  * polygon.
  * @param {*} polyObj 
  * @returns 
  */
-function completePolygonPoints(polyObj){
+function completePolygonPoints(polyObj) {
   polyObj.nwLat = polyObj.neLat;
   polyObj.nwLon = polyObj.swLon;
   polyObj.seLat = polyObj.swLat;
@@ -363,25 +363,25 @@ function completePolygonPoints(polyObj){
  * @param {Object} polyObj 
  * @returns Object with numeric coordinates
  */
-function validatePolygonPoints(polyObj){
+function validatePolygonPoints(polyObj) {
   let coordinates = {}
-  if(polyObj.neLat !== undefined &&
-     polyObj.neLon !== undefined &&
-      polyObj.swLat !== undefined &&
-       polyObj.swLon !== undefined){
-    
+  if (polyObj.neLat !== undefined &&
+    polyObj.neLon !== undefined &&
+    polyObj.swLat !== undefined &&
+    polyObj.swLon !== undefined) {
+
     Object.keys(polyObj).forEach(k => {
       let result = validateNumeric(polyObj[k.toString()]);
-      
-      if(result){
+
+      if (result) {
         coordinates[k.toString()] = result
       }
-  
+
     });
   }
 
-  return Object.keys(coordinates).length === 4 ?  coordinates : undefined;
-  
+  return Object.keys(coordinates).length === 4 ? coordinates : undefined;
+
 }
 
 /**
@@ -389,10 +389,10 @@ function validatePolygonPoints(polyObj){
  * @param {String} num 
  * @returns float or undefined
  */
-function validateNumeric(num){
+function validateNumeric(num) {
   let result = parseFloat(num);
   return isNaN(result) ? undefined : result;
 
 }
- 
+
 module.exports = router;

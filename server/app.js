@@ -8,7 +8,7 @@ const path = require("path");
 const api = require("./routes/api.js");
 
 // Compression config
-const compression = require("compression");
+//const compression = require("compression");
 
 // Compression middelware
 app.use(compression());
