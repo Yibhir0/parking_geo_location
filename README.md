@@ -55,5 +55,6 @@ When Moving around:
 	- queries take around 40ms.
 
 ## Performance pertaining to server cashing and compression.
-
+After disabling cashing and compression on the server code, The performance score dropes from 94 to 88.
+The size of the response body increases to 32.4 kb and fetching the polygon query takes 60 ms.
  
