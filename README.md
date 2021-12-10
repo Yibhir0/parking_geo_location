@@ -66,8 +66,7 @@ Google Chrome Version 96.0.4664.93 (Official Build) (64-bit)
 	- yet the pictures of the map are still loading extremely slow - up to 10 		seconds minimum
 	- the request for the queries are a bit less faster. ~ 4-5 seconds within specified bounds.
 
-#### No siginificant changed noticeable betwen disable server cache and enabled.
-
+ No significant changes noticeable between disable server cache and enabled on the end user experience.
 We have to keep in mind that we are testing it with a single user (Estefan).
 
 - Disable cache (client) & No throttle:
