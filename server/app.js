@@ -8,10 +8,10 @@ const path = require("path");
 const api = require("./routes/api.js");
 
 // Compression config
-//const compression = require("compression");
+const compression = require("compression");
 
 // Compression middelware
-//app.use(compression());
+app.use(compression());
 
 // Cache policy 1 year
 app.use(function (req, res, next) {

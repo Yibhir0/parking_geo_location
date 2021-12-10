@@ -214,32 +214,32 @@ router.get("/polygon", async function (req, res) {
     const polyObj = req.query;
 
     // Cach key
-    //const cacheK = polyObj.neLat + polyObj.neLon + polyObj.swLat + polyObj.swLon;
+    const cacheK = polyObj.neLat + polyObj.neLon + polyObj.swLat + polyObj.swLon;
 
     // Get data from cache
-    //let documents = cache.get(cacheK);
+    let documents = cache.get(cacheK);
 
-    // if (!documents) {
+    if (!documents) {
 
-    // Validate if the query string contains valid keys and values
-    const validPolyPoints = validatePolygonPoints(polyObj);
+      // Validate if the query string contains valid keys and values
+      const validPolyPoints = validatePolygonPoints(polyObj);
 
-    // Get Dao intance
-    const dao = new Dao();
+      // Get Dao intance
+      const dao = new Dao();
 
-    // Complete the other points of the polygon
-    const polygon = completePolygonPoints(validPolyPoints);
+      // Complete the other points of the polygon
+      const polygon = completePolygonPoints(validPolyPoints);
 
-    // Get the document from database
-    documents = await dao.getDocumentsWithinGeoPolygon(polygon);
+      // Get the document from database
+      documents = await dao.getDocumentsWithinGeoPolygon(polygon);
 
-    // We only store data when documents is not empty
-    // if (documents.length > 0) {
-    //   // Put data in cache
-    //   cache.put(cacheK, documents);
-    // }
+      // We only store data when documents is not empty
+      if (documents.length > 0) {
+      // Put data in cache
+        cache.put(cacheK, documents);
+      }
 
-    //}
+    }
 
     // Send Json response
     res.send(documents);
